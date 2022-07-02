@@ -1,0 +1,101 @@
+{% extends 'shop/basic.html' %}
+
+{% block title%} Paypal {% endblock %}
+
+{% block body %}
+    <div class="container">
+		<div class="row">
+			<div class="col my-4">
+				<br>
+				<img src="http://127.0.0.1:8000/media/shop/images/paypal.jpg"width="750px" height="500px">
+                <div id="paypal-button-container"></div>
+            </div>
+        </div>
+    </div>
+            {% endblock %}
+            
+            {% block js %}
+
+      <script src="https://www.paypal.com/sdk/js?client-id=AQLaT1nH-BJjMArhDh1U57SPke_DJ23pF73AyW98fLiNGk5xuiz6ap9LYWsmtzyLglCeqndHvqHAvvvx&currency=USD&disable-funding=credit"></script>
+
+      <script>
+
+      //  var total = 100
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+
+             style: {
+                color:  'blue',
+                shape:  'rect',
+                label:  'pay',
+                height: 50
+            },
+
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: totalPrice
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Show a success message to the buyer
+                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                    alert('Thanks for ordering and Paying in advance. Your order id is {{id}}. Use it to track your order using our order tracker');
+                    localStorage.clear();
+                    document.location="/shop";
+                });
+            }
+        }).render('#paypal-button-container');
+        if (localStorage.getItem('cart') == null) {
+    var cart = {};
+} else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+// console.log(cart);
+var sum = 0;
+var sumPrice = 0;
+var totalPrice = 0;
+if ($.isEmptyObject(cart)) {
+    // If object is empty
+    mystr = "<div class='alert alert-info'><font style='font-size:22px'>"
+    mystr = mystr + "<center>Your cart is <strong>Empty</strong>, please <strong>Add</strong> some items before checking out ! </center>"
+    mystr = mystr + "<center>Click <a href='/shop/' class='alert-link'>Here</a> to Add items.</center></font></div>";
+    $('#items').append(mystr);
+    document.getElementById('info').innerHTML = "";
+    document.getElementById('title').innerHTML = "";
+} else {
+    var i = 0;
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        let itemPrice = cart[item][2];
+        sum = sum + qty;
+        sumPrice = qty * itemPrice;
+        totalPrice = totalPrice + sumPrice;
+        mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">${++i} : ${name}<span class="badge badge-primary badge-pill">${qty} x Birr. ${itemPrice} = Birr. ${sumPrice}</span></li>`;
+        $('#items').append(mystr);
+    }
+    mystr = `<li class="list-group-item d-flex justify-content-between align-items-center" style="background: bisque;">Total Price:</span><span class="badge badge-danger badge-pill" id="totalPrice"> Birr. ${totalPrice} /-</span></li>`;
+    $('#items').append(mystr);
+}
+document.getElementById('cart').innerHTML = sum;
+document.getElementById('totalPrice').innerHTML = totalPrice;
+
+$('#itemsJson').val(JSON.stringify(cart));
+$('#amount').val($('#totalPrice').html());
+        {% if thank %}
+        alert('Thanks for ordering and Paying in advance. Your order id is {{id}}. Use it to track your order using our order tracker');
+        localStorage.clear();
+        document.location="/shop";
+        {%endif%}
+
+    </script>
+{% endblock %}
+
