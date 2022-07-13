@@ -136,15 +136,15 @@ def checkout(request):
         thank = True
         id = order.order_id
 
-        account_sid = "AC153247b4e012242b51bae56b3b91c6c0"
-        auth_token = ""
-        client = Client(account_sid, auth_token)
-        message = client.messages \
-                    .create(
-                        body=f"Welcome {name}, Dave Restaurant Your order ID is {id}, your order is {items_json}, Total Payment {amount} Birr ",
-                        from_='+19895841984',
-                        to=f'{phone}'
-                    )
+#         account_sid = "AC153247b4e012242b51bae56b3b91c6c0"
+#         auth_token = ""
+#         client = Client(account_sid, auth_token)
+#         message = client.messages \
+#                     .create(
+#                         body=f"Welcome {name}, Dave Restaurant Your order ID is {id}, your order is {items_json}, Total Payment {amount} Birr ",
+#                         from_='+19895841984',
+#                         to=f'{phone}'
+#                     )
         
         if 'onlinePay' in request.POST:
             	return render(request, 'shop/simple_checkout.html', {'thank': thank, 'id': id})
