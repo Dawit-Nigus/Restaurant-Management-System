@@ -137,7 +137,7 @@ def checkout(request):
         id = order.order_id
 
         account_sid = "AC153247b4e012242b51bae56b3b91c6c0"
-        auth_token = "7973d03de9ac4d133de10bc5c19eb65d"
+        auth_token = ""
         client = Client(account_sid, auth_token)
         message = client.messages \
                     .create(
