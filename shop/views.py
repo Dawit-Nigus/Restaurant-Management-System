@@ -7,6 +7,7 @@ from math import ceil
 from django.contrib.auth import authenticate, login, logout
 import json
 from django.views.decorators.csrf import csrf_exempt
+from twilio.rest import Client
  
 
 def index(request):
@@ -102,6 +103,19 @@ def search(request):
         dave = {'msg': "No item available. Please make sure to enter relevant search query"}
     return render(request, 'shop/search.html', dave)
 
+        # def sendsms():
+        #     account_sid = "AC153247b4e012242b51bae56b3b91c6c0"
+        #     auth_token = "7973d03de9ac4d133de10bc5c19eb65d"
+        #     client = Client(account_sid, auth_token)
+
+        #     message = client.messages \
+        #                     .create(
+        #                         body="It is me Dave ",
+        #                         from_='+19895841984',
+        #                         to='phone'
+        #                     )
+
+        #     print('message send succesfully')
 
 def checkout(request):
     if request.method == "POST":
@@ -121,6 +135,16 @@ def checkout(request):
         update.save()
         thank = True
         id = order.order_id
+
+        account_sid = "AC153247b4e012242b51bae56b3b91c6c0"
+        auth_token = "7973d03de9ac4d133de10bc5c19eb65d"
+        client = Client(account_sid, auth_token)
+        message = client.messages \
+                    .create(
+                        body=f"Welcome {name}, Dave Restaurant Your order ID is {id}, your order is {items_json}, Total Payment {amount} Birr ",
+                        from_='+19895841984',
+                        to=f'{phone}'
+                    )
         
         if 'onlinePay' in request.POST:
             	return render(request, 'shop/simple_checkout.html', {'thank': thank, 'id': id})
