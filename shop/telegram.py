@@ -1,7 +1,7 @@
 import requests
 
 msg = "hello it's me Dave"
-tele_auth_token = "5316372103:AAG3yJe4vuY_9MwxJMlB25dANsycKNfPf9Q" # Authentication token provided by Telegram bot
+tele_auth_token = "5316372103:AAG3yJe4vuY" # Authentication token provided by Telegram bot
 tel_group_id = "DjangoTgAPI"     # Telegram group name
 
 def send_msg_on_telegram(msg):
