@@ -141,8 +141,8 @@ def checkout(request):
 
         if 'onlinePay' in request.POST:
             # Twilio API
-            # account_sid = "AC153247b4e012242b51bae56b3b91c6c0"
-            # auth_token = "3809e7ee9ae824d3217b1fcd7024687f"
+            # account_sid = ""
+            # auth_token = ""
             # client = Client(account_sid, auth_token)
             # message = client.messages \
             #         .create(
@@ -152,14 +152,14 @@ def checkout(request):
             #         )
             msg=f"Welcome {name}, Dave Restaurant Your order ID is {id}, your order is {items_json}, Total Payment {amount} Birr Pay With paypal"
             send_msg_on_telegram(msg)
-            sms = SMS(api_key='53604f2cc947b36ca61578431cc7cca4e3022a67')
+            sms = SMS(api_key='')
             response = sms.send_message(to=f'{phone}', message=msg)
             return render(request, 'shop/simple_checkout.html', {'thank': thank, 'id': id})
         
         elif 'cashOnDelivery' in request.POST:
             msg=f"Welcome {name}, Dave Restaurant Your order ID is {id}, your order is {items_json}, Total Payment {amount} Birr Pay On Delivery"
             send_msg_on_telegram(msg)
-            sms = SMS(api_key='53604f2cc947b36ca61578431cc7cca4e3022a67')
+            sms = SMS(api_key='')
             response = sms.send_message(to=f'{phone}', message=msg)
             return render(request, 'shop/checkout.html', {'thank': thank, 'id': id})
     return render(request, 'shop/checkout.html')
